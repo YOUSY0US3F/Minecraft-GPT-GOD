@@ -1,4 +1,4 @@
-package com.example.examplemod;
+package net.bigyous.gptgodmc;
 
 import de.maxhenkel.voicechat.api.ForgeVoicechatPlugin;
 import de.maxhenkel.voicechat.api.VoicechatApi;
@@ -6,14 +6,14 @@ import de.maxhenkel.voicechat.api.VoicechatPlugin;
 import de.maxhenkel.voicechat.api.events.EventRegistration;
 
 @ForgeVoicechatPlugin
-public class ExampleVoicechatPlugin implements VoicechatPlugin {
+public class VoiceMonitorPlugin implements VoicechatPlugin {
 
     /**
      * @return the unique ID for this voice chat plugin
      */
     @Override
     public String getPluginId() {
-        return ExampleMod.MOD_ID;
+        return GPTGOD.MOD_ID;
     }
 
     /**
@@ -23,7 +23,7 @@ public class ExampleVoicechatPlugin implements VoicechatPlugin {
      */
     @Override
     public void initialize(VoicechatApi api) {
-        ExampleMod.LOGGER.info("Example voice chat plugin initialized!");
+        GPTGOD.LOGGER.info("I'm listening...");
     }
 
     /**
@@ -33,7 +33,7 @@ public class ExampleVoicechatPlugin implements VoicechatPlugin {
      */
     @Override
     public void registerEvents(EventRegistration registration) {
-        // TODO register your events
+        // TODO register events
     }
 
 }

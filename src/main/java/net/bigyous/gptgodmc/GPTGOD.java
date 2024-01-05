@@ -1,4 +1,4 @@
-package com.example.examplemod;
+package net.bigyous.gptgodmc;
 
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.common.MinecraftForge;
@@ -9,13 +9,13 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 
-@Mod(ExampleMod.MOD_ID)
-public class ExampleMod {
+@Mod(GPTGOD.MOD_ID)
+public class GPTGOD {
 
-    public static final String MOD_ID = "example_mod";
+    public static final String MOD_ID = "gptgodmc";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public ExampleMod() {
+    public GPTGOD() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         MinecraftForge.EVENT_BUS.register(this);
     }

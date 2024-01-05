@@ -27,7 +27,7 @@ minecraft {
         client {
             workingDirectory project.file('run')
             mods {
-                examplemod {
+                gptgodmc {
                     source sourceSets.main
                 }
             }
@@ -36,7 +36,7 @@ minecraft {
         server {
             workingDirectory project.file('run')
             mods {
-                examplemod {
+                gptgodmc {
                     source sourceSets.main
                 }
             }
@@ -69,6 +69,10 @@ dependencies {
 
     implementation "de.maxhenkel.voicechat:voicechat-api:${voicechat_api_version}"
 
+    implementation group: 'net.java.dev.jna', name: 'jna', version: '5.7.0'
+
+    implementation group: 'com.alphacephei', name: 'vosk', version: '0.3.45'
+
     runtimeOnly fg.deobf("maven.modrinth:simple-voice-chat:forge-${voicechat_dependency}")
 }
 
@@ -86,7 +90,7 @@ processResources {
 jar {
     manifest {
         attributes([
-                "Specification-Title"     : "examplemod",
+                "Specification-Title"     : "gptgodmc",
                 "Specification-Vendor"    : "examplemodvendor",
                 "Specification-Version"   : "1",
                 "Implementation-Title"    : name,

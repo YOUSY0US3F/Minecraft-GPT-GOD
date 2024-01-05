@@ -4,12 +4,12 @@ license="MIT"
 [[mods]]
 modId="${mod_id}"
 version="${mod_version}"
-displayName="Example Mod"
+displayName="GPT GOD for MC"
 logoFile="icon.png"
 credits=""
-authors="Example Author"
+authors="BigYous"
 description='''
-A Simple Voice Chat API mod example
+The blocky lands of Minecraft are godless no more...
 '''
 [[dependencies.${mod_id}]]
     modId="forge"
