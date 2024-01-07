@@ -4,8 +4,11 @@ import net.minecraft.server.level.ServerPlayer;
 import de.maxhenkel.voicechat.api.ForgeVoicechatPlugin;
 import de.maxhenkel.voicechat.api.VoicechatApi;
 import de.maxhenkel.voicechat.api.VoicechatPlugin;
+import de.maxhenkel.voicechat.api.VoicechatServerApi;
 import de.maxhenkel.voicechat.api.events.EventRegistration;
 import de.maxhenkel.voicechat.api.events.MicrophonePacketEvent;
+import de.maxhenkel.voicechat.api.events.PlayerDisconnectedEvent;
+import de.maxhenkel.voicechat.api.events.VoicechatServerStoppedEvent;
 import de.maxhenkel.voicechat.api.VoicechatConnection;
 import de.maxhenkel.voicechat.api.opus.OpusDecoder;
 
@@ -17,9 +20,7 @@ import javax.annotation.Nullable;
 public class VoiceMonitorPlugin implements VoicechatPlugin {
 
     private static ConcurrentHashMap<UUID, PlayerAudioBuffer> buffers;
-
-    @Nullable
-    private OpusDecoder decoder;
+    private static ConcurrentHashMap<UUID, OpusDecoder> decoders;
 
     /**
      * @return the unique ID for this voice chat plugin
@@ -38,6 +39,7 @@ public class VoiceMonitorPlugin implements VoicechatPlugin {
     public void initialize(VoicechatApi api) {
         GPTGOD.LOGGER.info("voice monitor initialized");
         buffers = new ConcurrentHashMap<UUID, PlayerAudioBuffer>();
+        decoders = new ConcurrentHashMap<UUID, OpusDecoder>();
     }
 
     /**
@@ -48,6 +50,8 @@ public class VoiceMonitorPlugin implements VoicechatPlugin {
     @Override
     public void registerEvents(EventRegistration registration) {
         registration.registerEvent(MicrophonePacketEvent.class, this::onMicPacket);
+        registration.registerEvent(PlayerDisconnectedEvent.class, this::onPlayerDisconnect);
+        registration.registerEvent(VoicechatServerStoppedEvent.class,this::onServerStopped);
     }
 
     private void onMicPacket(MicrophonePacketEvent event){
@@ -61,10 +65,10 @@ public class VoiceMonitorPlugin implements VoicechatPlugin {
             return;
         }
         // GPTGOD.LOGGER.info(String.format("Player: %s Sent packet of length: %d", player.getDisplayName().getString(), encodedData.length));
-        if (decoder == null) {
-            decoder = event.getVoicechat().createDecoder();
+        if (!decoders.containsKey(player.getUUID())) {
+            decoders.put(player.getUUID(), event.getVoicechat().createDecoder());
         }
-        decoder.resetState();
+        OpusDecoder decoder = decoders.get(player.getUUID());
         short[] decoded = decoder.decode(event.getPacket().getOpusEncodedData());
 
         if(encodedData.length > 0){
@@ -78,8 +82,27 @@ public class VoiceMonitorPlugin implements VoicechatPlugin {
         }
         else{
             buffers.get(player.getUUID()).encode(event.getVoicechat());
+            decoder.resetState();
             GPTGOD.LOGGER.info(String.format("Player: %s Finished talking, created mp3", player.getDisplayName().getString()));
         }
+    }
+
+    private void onPlayerDisconnect(PlayerDisconnectedEvent event){
+        cleanUpPlayer(event.getPlayerUuid(), event.getVoicechat());
+    }
+
+    private void onServerStopped(VoicechatServerStoppedEvent event){
+        decoders.forEach((key, value) -> cleanUpPlayer(key, event.getVoicechat()));
+    }
+
+    private void cleanUpPlayer(UUID uuid, VoicechatServerApi vc){
+        UUID playerUuid = uuid;
+        if (vc.getConnectionOf(playerUuid).getPlayer().getPlayer() instanceof ServerPlayer player){
+            AudioFileManager.deletePlayerMp3(player);
+        }
+        decoders.get(playerUuid).close();
+        decoders.remove(uuid);
+        GPTGOD.LOGGER.info(String.format("Cleaned up data for UUID: %s", uuid.toString()));
     }
 
 }
