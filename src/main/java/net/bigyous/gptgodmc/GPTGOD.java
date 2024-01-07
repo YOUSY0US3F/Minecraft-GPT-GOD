@@ -21,7 +21,7 @@ public class GPTGOD {
     }
 
     private void setup(FMLCommonSetupEvent event) {
-        LOGGER.info("Setting up example mod");
+        LOGGER.info("Setting up GPT GOD");
     }
 
     @SubscribeEvent

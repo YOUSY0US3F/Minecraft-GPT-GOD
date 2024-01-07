@@ -5,21 +5,27 @@ import de.maxhenkel.voicechat.api.mp3.Mp3Encoder;
 import java.io.IOException;
 
 import de.maxhenkel.voicechat.api.VoicechatApi;
-
+import de.maxhenkel.voicechat.api.VoicechatServerApi;
 import net.minecraft.server.level.ServerPlayer;
 
 public class PlayerAudioBuffer {
     private ServerPlayer player;
     private short[] samples;
+    private VoicechatServerApi api;
     
 
-    public PlayerAudioBuffer(short[] initialSamples, ServerPlayer player){
+    public PlayerAudioBuffer(short[] initialSamples, ServerPlayer player, VoicechatServerApi api){
         this.samples = initialSamples;
         this.player = player;
+        this.api = api;
     }   
 
     public short[] getSamples(){
         return this.samples;
+    }
+
+    public ServerPlayer getPlayer() {
+        return player;
     }
 
     public void addSamples(short[] addition){
@@ -30,7 +36,7 @@ public class PlayerAudioBuffer {
         this.samples = replace;
     }
 
-    public void encode(VoicechatApi api){
+    public void encode(){
         Mp3Encoder encoder = api.createMp3Encoder(AudioFileManager.FORMAT, AudioFileManager.BIT_RATE, 0, AudioFileManager.getPlayerOutputStream(player));
         try {
             encoder.encode(samples);

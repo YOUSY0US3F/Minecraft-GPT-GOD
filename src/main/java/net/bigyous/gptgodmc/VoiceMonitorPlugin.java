@@ -1,5 +1,6 @@
 package net.bigyous.gptgodmc;
 
+import net.bigyous.gptgodmc.utils.TaskQueue;
 import net.minecraft.server.level.ServerPlayer;
 import de.maxhenkel.voicechat.api.ForgeVoicechatPlugin;
 import de.maxhenkel.voicechat.api.VoicechatApi;
@@ -21,6 +22,7 @@ public class VoiceMonitorPlugin implements VoicechatPlugin {
 
     private static ConcurrentHashMap<UUID, PlayerAudioBuffer> buffers;
     private static ConcurrentHashMap<UUID, OpusDecoder> decoders;
+    private static TaskQueue<PlayerAudioBuffer> encodingQueue;
 
     /**
      * @return the unique ID for this voice chat plugin
@@ -40,6 +42,9 @@ public class VoiceMonitorPlugin implements VoicechatPlugin {
         GPTGOD.LOGGER.info("voice monitor initialized");
         buffers = new ConcurrentHashMap<UUID, PlayerAudioBuffer>();
         decoders = new ConcurrentHashMap<UUID, OpusDecoder>();
+        encodingQueue = new TaskQueue<PlayerAudioBuffer>((PlayerAudioBuffer buffer) -> {
+            buffer.encode();
+        });
     }
 
     /**
@@ -73,7 +78,7 @@ public class VoiceMonitorPlugin implements VoicechatPlugin {
 
         if(encodedData.length > 0){
             if(!buffers.containsKey(player.getUUID())){
-                PlayerAudioBuffer buffer = new PlayerAudioBuffer(decoded, player);
+                PlayerAudioBuffer buffer = new PlayerAudioBuffer(decoded, player, event.getVoicechat());
                 buffers.put(player.getUUID(), buffer);
             }
             else{
@@ -81,7 +86,9 @@ public class VoiceMonitorPlugin implements VoicechatPlugin {
             }
         }
         else{
-            buffers.get(player.getUUID()).encode(event.getVoicechat());
+            PlayerAudioBuffer toBeProcessed = buffers.get(player.getUUID());
+            encodingQueue.insert(toBeProcessed);
+            buffers.remove(player.getUUID());
             decoder.resetState();
             GPTGOD.LOGGER.info(String.format("Player: %s Finished talking, created mp3", player.getDisplayName().getString()));
         }
