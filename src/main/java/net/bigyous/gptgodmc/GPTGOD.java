@@ -18,6 +18,9 @@ public class GPTGOD {
     public GPTGOD() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         MinecraftForge.EVENT_BUS.register(this);
+
+        ForgeEventHandler eventHandler = new ForgeEventHandler();
+        MinecraftForge.EVENT_BUS.register(eventHandler);
     }
 
     private void setup(FMLCommonSetupEvent event) {
