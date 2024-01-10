@@ -1,6 +1,8 @@
 package net.bigyous.gptgodmc;
 
 import net.bigyous.gptgodmc.utils.TaskQueue;
+import net.bigyous.gptgodmc.GPT.Transcription;
+
 import net.minecraft.server.level.ServerPlayer;
 import de.maxhenkel.voicechat.api.ForgeVoicechatPlugin;
 import de.maxhenkel.voicechat.api.VoicechatApi;
@@ -44,6 +46,8 @@ public class VoiceMonitorPlugin implements VoicechatPlugin {
         decoders = new ConcurrentHashMap<UUID, OpusDecoder>();
         encodingQueue = new TaskQueue<PlayerAudioBuffer>((PlayerAudioBuffer buffer) -> {
             buffer.encode();
+            String speech = Transcription.Transcribe(AudioFileManager.getPlayerMp3(buffer.getPlayer()));
+            GPTGOD.LOGGER.info(String.format("%s said: %s", buffer.getPlayer().getDisplayName().getString(), speech));
         });
     }
 
@@ -90,7 +94,6 @@ public class VoiceMonitorPlugin implements VoicechatPlugin {
             encodingQueue.insert(toBeProcessed);
             buffers.remove(player.getUUID());
             decoder.resetState();
-            GPTGOD.LOGGER.info(String.format("Player: %s Finished talking, created mp3", player.getDisplayName().getString()));
         }
     }
 
