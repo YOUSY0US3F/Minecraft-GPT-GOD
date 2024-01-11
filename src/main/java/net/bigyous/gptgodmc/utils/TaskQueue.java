@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 
 public class TaskQueue<T> {
-    private ConcurrentLinkedQueue<T> queue;
+    private volatile ConcurrentLinkedQueue<T> queue;
     private Function<T> task;
     private boolean isExecuting;
 
@@ -23,11 +23,16 @@ public class TaskQueue<T> {
     }
 
     public void execute(){
-        isExecuting = true;
-        while(!queue.isEmpty()){
-            task.apply(queue.poll());
-        }
-        isExecuting = false;
+        Thread worker = new Thread(() -> {
+            isExecuting = true;
+            while(!queue.isEmpty()){
+                task.apply(queue.poll());
+            }
+            isExecuting = false;
+            Thread.currentThread().interrupt();
+        });
+        worker.start();
     }
 
 }
+

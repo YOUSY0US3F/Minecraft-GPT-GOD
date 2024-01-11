@@ -52,17 +52,15 @@ public class Transcription {
                 .header("Authorization", "Bearer " + Config.openAiKey)
                 .header("Content-Type", "multipart/form-data");
             HttpResponse<String> response =  client.send(request, BodyHandlers.ofString());
-            GPTGOD.LOGGER.info(response.body());
             return gson.fromJson(response.body(), TranscriptionResponse.class).getText();
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
+            GPTGOD.LOGGER.error("Attempted to Transcribe non-existant file", e);
             e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+            GPTGOD.LOGGER.error("An error occured furing Transcription", e);
             e.printStackTrace();
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            GPTGOD.LOGGER.error("Transcription Interrupted", e);
         }
         
 
