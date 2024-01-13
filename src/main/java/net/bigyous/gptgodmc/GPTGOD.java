@@ -17,6 +17,8 @@ public class GPTGOD {
     public static final String MOD_ID = "gptgodmc";
     public static final Logger LOGGER = LogUtils.getLogger();
 
+    public static EventLogger eventLogger;
+
     public GPTGOD() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         MinecraftForge.EVENT_BUS.register(this);
@@ -34,6 +36,8 @@ public class GPTGOD {
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
         LOGGER.info("Server starting");
+
+        eventLogger = new EventLogger(event.getServer());
     }
 
 }
