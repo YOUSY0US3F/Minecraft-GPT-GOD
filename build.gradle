@@ -17,6 +17,7 @@ apply plugin: 'net.minecraftforge.gradle'
 archivesBaseName = archives_base_name
 version = mod_version
 group = maven_group
+jarJar.enable()
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(java_version as int)
 
@@ -68,6 +69,10 @@ dependencies {
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
 
     implementation "de.maxhenkel.voicechat:voicechat-api:${voicechat_api_version}"
+
+    minecraftLibrary 'com.google.code.gson:gson:2.10.1'
+
+    minecraftLibrary 'com.github.mizosoft.methanol:methanol:1.7.0'
 
     runtimeOnly fg.deobf("maven.modrinth:simple-voice-chat:forge-${voicechat_dependency}")
 }
