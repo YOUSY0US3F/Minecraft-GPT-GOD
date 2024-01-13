@@ -3,6 +3,7 @@ package net.bigyous.gptgodmc;
 import de.maxhenkel.voicechat.api.mp3.Mp3Encoder;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import de.maxhenkel.voicechat.api.VoicechatApi;
 import de.maxhenkel.voicechat.api.VoicechatServerApi;
@@ -12,12 +13,13 @@ public class PlayerAudioBuffer {
     private ServerPlayer player;
     private short[] samples;
     private VoicechatServerApi api;
-    
+    private int bufferId;
 
     public PlayerAudioBuffer(short[] initialSamples, ServerPlayer player, VoicechatServerApi api){
         this.samples = initialSamples;
         this.player = player;
         this.api = api;
+        this.bufferId = AudioFileManager.getCurrentId();
     }   
 
     public short[] getSamples(){
@@ -37,14 +39,18 @@ public class PlayerAudioBuffer {
     }
 
     public void encode(){
-        Mp3Encoder encoder = api.createMp3Encoder(AudioFileManager.FORMAT, AudioFileManager.BIT_RATE, 0, AudioFileManager.getPlayerOutputStream(player));
+        Mp3Encoder encoder = api.createMp3Encoder(AudioFileManager.FORMAT, AudioFileManager.BIT_RATE, 0, AudioFileManager.getPlayerOutputStream(player, this.bufferId));
         try {
             encoder.encode(samples);
             encoder.close();
-            GPTGOD.LOGGER.info(String.format("created mp3 file at: %s", AudioFileManager.getPlayerMp3(player).toUri().toString()));
+            GPTGOD.LOGGER.info(String.format("created mp3 file at: %s", AudioFileManager.getPlayerMp3(player, this.bufferId).toUri().toString()));
         } catch (IOException e) {
             GPTGOD.LOGGER.warn(String.format("An IO Exception occured encoding mp3 file for Player: %s", player.getDisplayName().getString()));
         }
         this.samples = new short[] {};
+    }
+
+    public int getBufferId(){
+        return bufferId;
     }
 }

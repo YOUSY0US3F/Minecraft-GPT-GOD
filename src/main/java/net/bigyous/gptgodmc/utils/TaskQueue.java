@@ -23,15 +23,16 @@ public class TaskQueue<T> {
     }
 
     public void execute(){
-        Thread worker = new Thread(() -> {
-            isExecuting = true;
-            while(!queue.isEmpty()){
+        isExecuting = true;
+        while(!queue.isEmpty()){
+            Thread worker = new Thread(()->{
                 task.apply(queue.poll());
-            }
-            isExecuting = false;
-            Thread.currentThread().interrupt();
-        });
-        worker.start();
+                Thread.currentThread().interrupt();
+            });
+            worker.start();
+        }
+        isExecuting = false;
+        
     }
 
 }

@@ -45,8 +45,8 @@ public class VoiceMonitorPlugin implements VoicechatPlugin {
         buffers = new ConcurrentHashMap<UUID, PlayerAudioBuffer>();
         decoders = new ConcurrentHashMap<UUID, OpusDecoder>();
         encodingQueue = new TaskQueue<PlayerAudioBuffer>((PlayerAudioBuffer buffer) -> {
-            buffer.encode();
-            String speech = Transcription.Transcribe(AudioFileManager.getPlayerMp3(buffer.getPlayer()));
+            String speech = Transcription.Transcribe(AudioFileManager.getPlayerMp3(buffer.getPlayer(), buffer.getBufferId()));
+            AudioFileManager.deleteFile(buffer.getPlayer(), buffer.getBufferId());
             GPTGOD.LOGGER.info(String.format("%s said: %s", buffer.getPlayer().getDisplayName().getString(), speech));
         });
     }
@@ -91,6 +91,7 @@ public class VoiceMonitorPlugin implements VoicechatPlugin {
         }
         else{
             PlayerAudioBuffer toBeProcessed = buffers.get(player.getUUID());
+            toBeProcessed.encode();
             encodingQueue.insert(toBeProcessed);
             buffers.remove(player.getUUID());
             decoder.resetState();
@@ -108,7 +109,7 @@ public class VoiceMonitorPlugin implements VoicechatPlugin {
     private void cleanUpPlayer(UUID uuid, VoicechatServerApi vc){
         UUID playerUuid = uuid;
         if (vc.getConnectionOf(playerUuid).getPlayer().getPlayer() instanceof ServerPlayer player){
-            AudioFileManager.deletePlayerMp3(player);
+            AudioFileManager.deletePlayerData(player);
         }
         decoders.get(playerUuid).close();
         decoders.remove(uuid);
