@@ -1,81 +1,36 @@
 package net.bigyous.gptgodmc;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
-import net.minecraftforge.eventbus.api.Event;
+import net.bigyous.gptgodmc.loggables.Loggable;
 
 public class EventLogger {
-    private static List<Event> events = new ArrayList<>();
+    private static List<Loggable> loggables = new ArrayList<>();
 
-    public static void addEvent(Event event) {
-        events.add(event);
-    }
-
-    public static List<String> logPickups(List<EntityItemPickupEvent> pickups) {
-        // Map from player name to item quantity map
-        HashMap<String, HashMap<String, Integer>> map = new HashMap<>();
-
-        List<String> logs = new ArrayList<>();
-
-        // Accumulate pickups per entity (player)
-        for (EntityItemPickupEvent event : pickups) {
-            String playerName = event.getEntity().getDisplayName().getString();
-
-            if (!map.containsKey(playerName)) {
-                map.put(playerName, new HashMap<String, Integer>());
+    public static void addLoggable(Loggable event) {
+        if (loggables.size() > 0) {
+            Loggable last = loggables.get(loggables.size() - 1);
+            // try combine
+            if (!last.combine(event)) {
+                // if not combined, add to list
+                loggables.add(event);
             }
-
-            String itemName = event.getItem().getDisplayName().getString();
-
-            // Uh weird design forge but ok
-            ItemStack itemStack = event.getItem().getItem();
-            int itemCount = itemStack.getCount();
-
-            HashMap<String, Integer> itemMap = map.get(playerName);
-
-            if (!itemMap.containsKey(itemName)) {
-                itemMap.put(itemName, 0);
-            }
-
-            itemMap.put(itemName, itemMap.get(itemName) + itemCount);
+        } else {
+            // If empty, just add
+            loggables.add(event);
         }
-
-        // Log the accumulated data
-        for (Map.Entry<String, HashMap<String, Integer>> entry : map.entrySet()) {
-            String playerName = entry.getKey();
-            HashMap<String, Integer> itemMap = entry.getValue();
-
-            StringBuilder sb = new StringBuilder(playerName + " picked up: ");
-
-            for (Map.Entry<String, Integer> itemEntry : itemMap.entrySet()) {
-                sb.append(itemEntry.getValue() + "x " + itemEntry.getKey() + ", ");
-            }
-            // Remove trailing comma
-            sb.setLength(sb.length() - 2);
-
-            logs.add(sb.toString());
-        }
-
-        return logs;
     }
 
     public static List<String> flushLogs() {
         List<String> logs = new ArrayList<>();
-
-        List<EntityItemPickupEvent> pickups = new ArrayList<>();
-
-        // Convert all capture events to logs
-        for (Event event : events) {
-            if (event instanceof EntityItemPickupEvent) {
-                pickups.add((EntityItemPickupEvent) event);
-            }
+        
+        for (Loggable event: loggables) {
+            logs.add(event.getLog());
         }
 
-        logs.addAll(logPickups(pickups));
+        // Clear events
+        // TODO: Summarize instead
+        loggables.clear();
 
         return logs;
     }

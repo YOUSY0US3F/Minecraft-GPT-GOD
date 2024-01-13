@@ -21,7 +21,7 @@ public class GPTGOD {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         MinecraftForge.EVENT_BUS.register(this);
 
-        ForgeEventHandler eventHandler = new ForgeEventHandler();
+        LoggableEventHandler eventHandler = new LoggableEventHandler();
         MinecraftForge.EVENT_BUS.register(eventHandler);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.SPEC);

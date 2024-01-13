@@ -2,11 +2,11 @@ package net.bigyous.gptgodmc;
 
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-
+import net.bigyous.gptgodmc.loggables.ItemPickupLoggable;
 import net.minecraftforge.event.ServerChatEvent;
 
 
-public class ForgeEventHandler {
+public class LoggableEventHandler {
     @SubscribeEvent
     public void pickupItem(EntityItemPickupEvent event) {
         
@@ -15,7 +15,10 @@ public class ForgeEventHandler {
         System.out.println("Name: " + event.getEntity().getName());
         System.out.println(event);
 
-        EventLogger.addEvent(event);
+        //EventLogger.addEvent(event);
+        EventLogger.addLoggable(
+            new ItemPickupLoggable(event)
+        );
     }
 
     @SubscribeEvent
