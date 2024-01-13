@@ -4,7 +4,9 @@ import com.mojang.logging.LogUtils;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
@@ -21,10 +23,12 @@ public class GPTGOD {
 
         ForgeEventHandler eventHandler = new ForgeEventHandler();
         MinecraftForge.EVENT_BUS.register(eventHandler);
+
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.SPEC);
     }
 
     private void setup(FMLCommonSetupEvent event) {
-        LOGGER.info("Setting up example mod");
+        LOGGER.info("Setting up GPT GOD");
     }
 
     @SubscribeEvent
