@@ -18,7 +18,7 @@ public class BaseLoggable implements Loggable {
 
     protected String getFormattedTimestamp() {
         ZonedDateTime zdt = timestamp.atZone(ZoneId.systemDefault());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
         String formattedTime = zdt.format(formatter);
         return "[" + formattedTime + "]: ";
     }
