@@ -1,6 +1,8 @@
 package net.bigyous.gptgodmc;
 
 import com.mojang.logging.LogUtils;
+
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -16,6 +18,7 @@ public class GPTGOD {
 
     public static final String MOD_ID = "gptgodmc";
     public static final Logger LOGGER = LogUtils.getLogger();
+    public static MinecraftServer SERVER;
 
     public GPTGOD() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
@@ -34,6 +37,7 @@ public class GPTGOD {
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
         LOGGER.info("Server starting");
+        SERVER = event.getServer();
     }
 
 }

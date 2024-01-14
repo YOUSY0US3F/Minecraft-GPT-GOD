@@ -17,7 +17,6 @@ import de.maxhenkel.voicechat.api.opus.OpusDecoder;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.UUID;
-import javax.annotation.Nullable;
 
 @ForgeVoicechatPlugin
 public class VoiceMonitorPlugin implements VoicechatPlugin {

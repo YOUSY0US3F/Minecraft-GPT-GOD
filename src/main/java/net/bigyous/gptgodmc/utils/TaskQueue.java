@@ -26,7 +26,7 @@ public class TaskQueue<T> {
         isExecuting = true;
         while(!queue.isEmpty()){
             Thread worker = new Thread(()->{
-                task.apply(queue.poll());
+                task.run(queue.poll());
                 Thread.currentThread().interrupt();
             });
             worker.start();
