@@ -23,8 +23,10 @@ public class GPTGOD {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         MinecraftForge.EVENT_BUS.register(this);
 
-        LoggableEventHandler eventHandler = new LoggableEventHandler();
-        MinecraftForge.EVENT_BUS.register(eventHandler);
+        // REGISTERING THIS WAY DOES NOT WORK FOR SOME EVENTS
+        //LoggableEventHandler eventHandler = new LoggableEventHandler();
+        //MinecraftForge.EVENT_BUS.register(eventHandler);
+        MinecraftForge.EVENT_BUS.register(LoggableEventHandler.class);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.SPEC);
     }
@@ -38,6 +40,8 @@ public class GPTGOD {
         LOGGER.info("Server starting");
 
         eventLogger = new EventLogger(event.getServer());
+
+        LOGGER.info("Event logger initialized: " + eventLogger);
     }
 
 }
