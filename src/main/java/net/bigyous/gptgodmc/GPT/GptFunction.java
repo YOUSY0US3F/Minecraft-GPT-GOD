@@ -1,5 +1,6 @@
 package net.bigyous.gptgodmc.GPT;
 
+import net.bigyous.gptgodmc.GPTGOD;
 import net.bigyous.gptgodmc.interfaces.Function;
 
 import java.util.Map;
@@ -14,6 +15,7 @@ public class GptFunction {
         this.name = name;
         this.description = description;
         this.parameters = new FunctionParameters("object", params);
+        this.function = function;
     }
 
     public String getDescription() {
@@ -45,6 +47,7 @@ public class GptFunction {
     }
 
     public void runFunction(String jsonArgs){
+        GPTGOD.LOGGER.info(String.format("%s invoked", this.name));
         function.run(jsonArgs);
     }
 }

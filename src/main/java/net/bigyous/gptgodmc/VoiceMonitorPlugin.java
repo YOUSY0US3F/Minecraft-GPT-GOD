@@ -110,6 +110,9 @@ public class VoiceMonitorPlugin implements VoicechatPlugin {
         if (vc.getConnectionOf(playerUuid).getPlayer().getPlayer() instanceof ServerPlayer player){
             AudioFileManager.deletePlayerData(player);
         }
+        if(!decoders.contains(playerUuid)){
+            return;
+        }
         decoders.get(playerUuid).close();
         decoders.remove(uuid);
         GPTGOD.LOGGER.info(String.format("Cleaned up data for UUID: %s", uuid.toString()));
