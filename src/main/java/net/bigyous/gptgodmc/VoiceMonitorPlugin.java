@@ -2,7 +2,7 @@ package net.bigyous.gptgodmc;
 
 import net.bigyous.gptgodmc.utils.TaskQueue;
 import net.bigyous.gptgodmc.GPT.Transcription;
-
+import net.bigyous.gptgodmc.loggables.ChatLoggable;
 import net.minecraft.server.level.ServerPlayer;
 import de.maxhenkel.voicechat.api.ForgeVoicechatPlugin;
 import de.maxhenkel.voicechat.api.VoicechatApi;
@@ -47,6 +47,9 @@ public class VoiceMonitorPlugin implements VoicechatPlugin {
             String speech = Transcription.Transcribe(AudioFileManager.getPlayerMp3(buffer.getPlayer(), buffer.getBufferId()));
             AudioFileManager.deleteFile(buffer.getPlayer(), buffer.getBufferId());
             GPTGOD.LOGGER.info(String.format("%s said: %s", buffer.getPlayer().getDisplayName().getString(), speech));
+            GPTGOD.eventLogger.addLoggable(
+                new ChatLoggable(buffer.getPlayer().getDisplayName().getString(), speech)
+            );
         });
     }
 
