@@ -17,12 +17,16 @@ public class GPTGOD {
     public static final String MOD_ID = "gptgodmc";
     public static final Logger LOGGER = LogUtils.getLogger();
 
+    public static EventLogger eventLogger;
+
     public GPTGOD() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         MinecraftForge.EVENT_BUS.register(this);
 
-        ForgeEventHandler eventHandler = new ForgeEventHandler();
-        MinecraftForge.EVENT_BUS.register(eventHandler);
+        // REGISTERING THIS WAY DOES NOT WORK FOR SOME EVENTS
+        //LoggableEventHandler eventHandler = new LoggableEventHandler();
+        //MinecraftForge.EVENT_BUS.register(eventHandler);
+        MinecraftForge.EVENT_BUS.register(LoggableEventHandler.class);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.SPEC);
     }
@@ -34,6 +38,10 @@ public class GPTGOD {
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
         LOGGER.info("Server starting");
+
+        eventLogger = new EventLogger(event.getServer());
+
+        LOGGER.info("Event logger initialized: " + eventLogger);
     }
 
 }
