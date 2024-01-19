@@ -11,6 +11,13 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.ParseResults;
 
 import net.bigyous.gptgodmc.GPTGOD;
+import net.bigyous.gptgodmc.GPT.Json.Choice;
+import net.bigyous.gptgodmc.GPT.Json.GptFunction;
+import net.bigyous.gptgodmc.GPT.Json.GptResponse;
+import net.bigyous.gptgodmc.GPT.Json.GptTool;
+import net.bigyous.gptgodmc.GPT.Json.Parameter;
+import net.bigyous.gptgodmc.GPT.Json.ResponseMessage;
+import net.bigyous.gptgodmc.GPT.Json.ToolCall;
 import net.bigyous.gptgodmc.interfaces.Function;
 
 import net.minecraft.server.level.ServerPlayer;
@@ -100,6 +107,15 @@ public class GptActions {
         GPTGOD.LOGGER.info(String.format("running function \"%s\" with json arguments \"%s\"", functionName, jsonArgs));
         functionMap.get(functionName).runFunction(jsonArgs);
         return 1;
+    }
+
+    public static void processResponse(String response){
+       GptResponse responseObject =  gson.fromJson(response, GptResponse.class);
+       for(Choice choice : responseObject.getChoices()){
+        for( ToolCall call : choice.getMessage().getTool_calls()){
+            run(call.getFunction().getName(), call.getFunction().getArguments());
+        }
+       }
     }
 
 

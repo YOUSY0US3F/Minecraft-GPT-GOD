@@ -1,4 +1,4 @@
-package net.bigyous.gptgodmc.GPT;
+package net.bigyous.gptgodmc.GPT.Json;
 
 import net.bigyous.gptgodmc.GPTGOD;
 import net.bigyous.gptgodmc.interfaces.Function;

@@ -1,4 +1,4 @@
-package net.bigyous.gptgodmc.GPT;
+package net.bigyous.gptgodmc.GPT.Json;
 
 public class GptTool {
     private String type;

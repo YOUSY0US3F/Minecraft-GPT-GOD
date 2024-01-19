@@ -15,6 +15,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import net.bigyous.gptgodmc.GPTGOD;
+import net.bigyous.gptgodmc.GPT.Json.TranscriptionResponse;
 import net.bigyous.gptgodmc.Config;
 
 public class Transcription {
@@ -31,7 +32,7 @@ public class Transcription {
             MultipartBodyPublisher body = MultipartBodyPublisher.newBuilder()
                 .filePart("file", audioPath)
                 .textPart("model", "whisper-1")
-                .textPart("language", "en")
+                .textPart("language", Config.language)
                 .build();
             MutableRequest request = MutableRequest.POST("https://api.openai.com/v1/audio/transcriptions", body)
                 .header("Authorization", "Bearer " + Config.openAiKey)

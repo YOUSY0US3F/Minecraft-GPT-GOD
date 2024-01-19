@@ -44,11 +44,9 @@ public class GPTGOD {
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
         LOGGER.info("Server starting");
-
-        eventLogger = new EventLogger(event.getServer());
-
-        LOGGER.info("Event logger initialized: " + eventLogger);
         SERVER = event.getServer();
+        eventLogger = new EventLogger(SERVER);
+        LOGGER.info("Event logger initialized: " + eventLogger);
         DebugCommand.register(SERVER.getCommands().getDispatcher());
     }
 
