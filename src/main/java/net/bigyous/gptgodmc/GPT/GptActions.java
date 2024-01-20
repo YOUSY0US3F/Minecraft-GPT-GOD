@@ -75,7 +75,7 @@ public class GptActions {
     private static GptTool[] tools = new GptTool[functionMap.size()];
 
     public static GptTool[] GetAllTools(){
-        GptFunction[] functions = (GptFunction[]) functionMap.values().toArray();
+        GptFunction[] functions = functionMap.values().toArray(new GptFunction[functionMap.size()]);
         if(tools[0] != null){
             return tools;
         }
