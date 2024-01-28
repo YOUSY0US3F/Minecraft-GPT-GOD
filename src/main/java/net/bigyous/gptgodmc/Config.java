@@ -12,13 +12,19 @@ public class Config {
     private static final ForgeConfigSpec.ConfigValue<String> OPENAI_KEY = BUILDER
         .comment("Your OpenAi API key")
         .define("apiKey", "");
+
+    private static final ForgeConfigSpec.ConfigValue<String> LANGUAGE = BUILDER
+    .comment("Language that will be used for transcription")
+    .define("language", "en");
     
     static final ForgeConfigSpec SPEC = BUILDER.build();
 
     public static String openAiKey;
+    public static String language;
 
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event){
         openAiKey = OPENAI_KEY.get();
+        language = LANGUAGE.get();
     }
 }

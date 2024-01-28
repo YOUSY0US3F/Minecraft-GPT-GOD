@@ -1,7 +1,12 @@
 package net.bigyous.gptgodmc;
 
 import com.mojang.logging.LogUtils;
+
+import net.bigyous.gptgodmc.GPT.GptActions;
+import net.bigyous.gptgodmc.utils.DebugCommand;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -16,6 +21,7 @@ public class GPTGOD {
 
     public static final String MOD_ID = "gptgodmc";
     public static final Logger LOGGER = LogUtils.getLogger();
+    public static MinecraftServer SERVER;
 
     public static EventLogger eventLogger;
 
@@ -38,10 +44,16 @@ public class GPTGOD {
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
         LOGGER.info("Server starting");
-
-        eventLogger = new EventLogger(event.getServer());
-
+        SERVER = event.getServer();
+        eventLogger = new EventLogger(SERVER);
         LOGGER.info("Event logger initialized: " + eventLogger);
+        DebugCommand.register(SERVER.getCommands().getDispatcher());
+    }
+
+    @SubscribeEvent
+    public void onPlayerJoin(PlayerLoggedInEvent event){
+        GptActions.run("announce", "{\"message\": \"I'm in constant pain\"}");
+        //GptActions.run("whisper", String.format("{\"playerName\": \"%s\", \"message\": \"commit die :)\"}", event.getEntity().getDisplayName()));
     }
 
 }

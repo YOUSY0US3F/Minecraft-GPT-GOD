@@ -17,7 +17,6 @@ import de.maxhenkel.voicechat.api.opus.OpusDecoder;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.UUID;
-import javax.annotation.Nullable;
 
 @ForgeVoicechatPlugin
 public class VoiceMonitorPlugin implements VoicechatPlugin {
@@ -113,6 +112,9 @@ public class VoiceMonitorPlugin implements VoicechatPlugin {
         UUID playerUuid = uuid;
         if (vc.getConnectionOf(playerUuid).getPlayer().getPlayer() instanceof ServerPlayer player){
             AudioFileManager.deletePlayerData(player);
+        }
+        if(!decoders.contains(playerUuid)){
+            return;
         }
         decoders.get(playerUuid).close();
         decoders.remove(uuid);

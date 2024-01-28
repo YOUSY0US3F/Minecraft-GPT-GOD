@@ -74,6 +74,8 @@ dependencies {
 
     minecraftLibrary 'com.github.mizosoft.methanol:methanol:1.7.0'
 
+    minecraftLibrary 'com.knuddels:jtokkit:0.6.1'
+    
     runtimeOnly fg.deobf("maven.modrinth:simple-voice-chat:forge-${voicechat_dependency}")
 }
 
