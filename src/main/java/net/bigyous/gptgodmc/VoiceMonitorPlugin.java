@@ -47,7 +47,7 @@ public class VoiceMonitorPlugin implements VoicechatPlugin {
             String speech = Transcription.Transcribe(AudioFileManager.getPlayerMp3(buffer.getPlayer(), buffer.getBufferId()));
             AudioFileManager.deleteFile(buffer.getPlayer(), buffer.getBufferId());
             GPTGOD.LOGGER.info(String.format("%s said: %s", buffer.getPlayer().getDisplayName().getString(), speech));
-            GPTGOD.eventLogger.addLoggable(
+            EventLogger.addLoggable(
                 new ChatLoggable(buffer.getPlayer().getDisplayName().getString(), speech)
             );
         });

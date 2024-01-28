@@ -3,19 +3,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.bigyous.gptgodmc.loggables.Loggable;
-import net.minecraft.server.MinecraftServer;
 
 public class EventLogger {
-    MinecraftServer server;
-    ServerInfoSummarizer serverSummarizer;
-    private List<Loggable> loggables = new ArrayList<>();
+    private static List<Loggable> loggables = new ArrayList<>();
 
-    public EventLogger(MinecraftServer server) {
-        this.server = server;
-        serverSummarizer = new ServerInfoSummarizer(server);
-    }
-
-    public void addLoggable(Loggable event) {
+    public static void addLoggable(Loggable event) {
         if (loggables.size() > 0) {
             Loggable last = loggables.get(loggables.size() - 1);
             // try combine
@@ -29,12 +21,12 @@ public class EventLogger {
         }
     }
 
-    public List<String> flushLogs() {
+    public static List<String> flushLogs() {
         List<String> logs = new ArrayList<>();
 
         // Include status summary at beginning
         logs.add(
-            serverSummarizer.getStatusSummary()
+            ServerInfoSummarizer.getStatusSummary()
         );
         
         for (Loggable event: loggables) {
@@ -48,7 +40,7 @@ public class EventLogger {
         return logs;
     }
 
-    public String dump() {
+    public static String dump() {
         return String.join("\n", flushLogs());
     }
 }
