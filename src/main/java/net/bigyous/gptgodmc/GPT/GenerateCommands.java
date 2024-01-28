@@ -39,7 +39,7 @@ public class GenerateCommands {
     public static void generate(String prompt){
         GPTGOD.LOGGER.info("generating commands with prompt: " + prompt);
         gpt.addContext(String.format("Players: %s", Arrays.toString(GPTGOD.SERVER.getPlayerNames())), "PlayerNames")
-        .addLogs(String.format("write Minecraft commands that: %s", prompt), "prompt").checkRequestBody();
-        //.send(functionMap);
+        .addLogs(String.format("write Minecraft commands that: %s", prompt), "prompt")
+        .send(functionMap);
     }
 }
