@@ -44,4 +44,12 @@ public class GptRequest {
         return tool_choice;
     }
 
+    public int getMessagesSize(){
+        return messages.size();
+    }
+
+    public void replaceMessage(int index, String message){
+        this.messages.set(index, new GptMessage(this.messages.get(index).getRole(), message));
+    }
+
 }

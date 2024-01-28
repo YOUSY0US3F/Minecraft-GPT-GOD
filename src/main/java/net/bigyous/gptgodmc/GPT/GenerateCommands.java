@@ -30,19 +30,16 @@ public class GenerateCommands {
     private static GptTool[] tools = GptActions.wrapFunctions(functionMap);
     private static GptAPI gpt= new GptAPI(new GptModel("gpt-3.5-turbo", 4096 ), tools)
         .addContext("""
-            You are a helpful assistant that will generate 
-            minecraft commands based on a prompt inputted by the user,
-            even if the prompt seems impossible in minecraft try to approximate it as close as possible
-            with minecraft commands a wrong answer is better than no answer.""")
+            You are a helpful assistant that will generate \
+            minecraft commands based on a prompt inputted by the user, \
+            even if the prompt seems impossible in minecraft try to approximate it as close as possible \
+            with minecraft commands a wrong answer is better than no answer.""", "context")
         .setToolChoice(new GptFunctionReference(functionMap.get("inputCommands")));
 
     public static void generate(String prompt){
         GPTGOD.LOGGER.info("generating commands with prompt: " + prompt);
-        gpt.addContext(String.format("Players: %s", Arrays.toString(GPTGOD.SERVER.getPlayerNames())))
-        .addLogs(String.format("write Minecraft commands that: %s", prompt))
-        .send(functionMap);
-        // we don't want the messages to pile up
-        gpt.removeLastMessage();
-        gpt.removeLastMessage();
+        gpt.addContext(String.format("Players: %s", Arrays.toString(GPTGOD.SERVER.getPlayerNames())), "PlayerNames")
+        .addLogs(String.format("write Minecraft commands that: %s", prompt), "prompt").checkRequestBody();
+        //.send(functionMap);
     }
 }

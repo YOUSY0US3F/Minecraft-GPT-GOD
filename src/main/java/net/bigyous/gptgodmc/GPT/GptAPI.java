@@ -1,6 +1,7 @@
 package net.bigyous.gptgodmc.GPT;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.http.HttpHeaders;
@@ -29,6 +30,7 @@ public class GptAPI {
     private CloseableHttpClient client;
     private GptRequest body;
     private String CHATGPTURL = "https://api.openai.com/v1/chat/completions";
+    private Map<String, Integer> messageMap = new HashMap<String, Integer>();
     public GptAPI (GptModel model){
         this.body = new GptRequest(model, GptActions.GetAllTools());
         gson.registerTypeAdapter(GptModel.class, new ModelSerializer());
@@ -47,13 +49,22 @@ public class GptAPI {
         gson.setExclusionStrategies(new ParameterExclusion());
         this.client = HttpClientBuilder.create().build();
     }
-    public GptAPI addContext(String context){
+    public GptAPI addContext(String context, String name){
+        if(this.messageMap.containsKey(name)){
+            this.body.replaceMessage(messageMap.get(name), context);
+            return this;
+        }
         this.body.addMessage("system", context);
+        this.messageMap.put(name, this.body.getMessagesSize()-1);
         return this;
     }
-    // TODO set this up to accept a list of Log objects that have the tokens
-    public GptAPI addLogs(String Logs){
+    public GptAPI addLogs(String Logs, String name){
+        if(this.messageMap.containsKey(name)){
+            this.body.replaceMessage(messageMap.get(name), Logs);
+            return this;
+        }
         this.body.addMessage("user", Logs);
+        this.messageMap.put(name, this.body.getMessagesSize()-1);
         return this;
     }
     public GptAPI setToolChoice(Object tool_choice){
@@ -114,5 +125,10 @@ public class GptAPI {
             Thread.currentThread().interrupt();
         });
         worker.start();
+    }
+
+    //DEBUG method
+    public void checkRequestBody(){
+        GPTGOD.LOGGER.info("POSTING " + gson.setPrettyPrinting().create().toJson(body));
     }
 }
