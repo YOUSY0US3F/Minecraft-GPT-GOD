@@ -10,6 +10,7 @@ import net.bigyous.gptgodmc.loggables.DamageLoggable;
 import net.bigyous.gptgodmc.loggables.ItemPickupLoggable;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.ServerChatEvent;
+import net.bigyous.gptgodmc.EventLogger;
 
 @Mod.EventBusSubscriber(value=Dist.DEDICATED_SERVER)
 public class LoggableEventHandler {
@@ -24,7 +25,7 @@ public class LoggableEventHandler {
         System.out.println(event);
 
         //EventLogger.addEvent(event);
-        if (GPTGOD.eventLogger != null) GPTGOD.eventLogger.addLoggable(
+        EventLogger.addLoggable(
             new ItemPickupLoggable(event)
         );
     }
@@ -35,14 +36,14 @@ public class LoggableEventHandler {
 
         // dbg: dump logs
         System.out.println("=== DUMPED LOGS: ===");
-        if (GPTGOD.eventLogger != null) System.out.println(GPTGOD.eventLogger.dump());
+        System.out.println(EventLogger.dump());
         System.out.println("====================");
     }
 
     @SubscribeEvent
     public static void onAttackEntity(AttackEntityEvent event) {
         System.out.println("Entity attacked");
-        if (GPTGOD.eventLogger != null) GPTGOD.eventLogger.addLoggable(
+        EventLogger.addLoggable(
             new AttackLoggable(event)
         );
     }
@@ -50,7 +51,7 @@ public class LoggableEventHandler {
     @SubscribeEvent
     public static void onDamage(LivingDamageEvent event) {
         System.out.println("Entity damaged");
-        if (GPTGOD.eventLogger != null) GPTGOD.eventLogger.addLoggable(
+        EventLogger.addLoggable(
             new DamageLoggable(event)
         );
     }

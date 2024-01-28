@@ -23,8 +23,6 @@ public class GPTGOD {
     public static final Logger LOGGER = LogUtils.getLogger();
     public static MinecraftServer SERVER;
 
-    public static EventLogger eventLogger;
-
     public GPTGOD() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         MinecraftForge.EVENT_BUS.register(this);
@@ -45,8 +43,6 @@ public class GPTGOD {
     public void onServerStarting(ServerStartingEvent event) {
         LOGGER.info("Server starting");
         SERVER = event.getServer();
-        eventLogger = new EventLogger(SERVER);
-        LOGGER.info("Event logger initialized: " + eventLogger);
         DebugCommand.register(SERVER.getCommands().getDispatcher());
     }
 

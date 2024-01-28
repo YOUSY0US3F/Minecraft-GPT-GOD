@@ -2,18 +2,11 @@ package net.bigyous.gptgodmc;
 
 import java.util.List;
 
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 
 public class ServerInfoSummarizer {
-    private MinecraftServer server;
-
-    public ServerInfoSummarizer(MinecraftServer server) {
-        this.server = server;
-    }
-
     public static String getInventoryInfo(ServerPlayer player) {
         StringBuilder sb = new StringBuilder();
         // Armor Items
@@ -48,9 +41,9 @@ public class ServerInfoSummarizer {
         return stack.getDisplayName().getString().replaceAll("[\\[\\]]", "") + " x" + stack.getCount();
     }
 
-    public String getStatusSummary() {
+    public static String getStatusSummary() {
         StringBuilder sb = new StringBuilder("=== Server Status ===\n");
-        List<ServerPlayer> players = server.getPlayerList().getPlayers();
+        List<ServerPlayer> players = GPTGOD.SERVER.getPlayerList().getPlayers();
 
         for (ServerPlayer player : players) {
             //player.getP
