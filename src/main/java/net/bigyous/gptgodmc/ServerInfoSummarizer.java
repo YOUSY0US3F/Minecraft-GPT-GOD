@@ -51,6 +51,7 @@ public class ServerInfoSummarizer {
             float health = player.getHealth();
             float maxHealth = player.getMaxHealth();
             boolean isDead = player.isDeadOrDying();
+            boolean isSleeping = player.isSleeping();
             //player.getInventory()
             String inventoryInfo = getInventoryInfo(player);
 
@@ -58,7 +59,8 @@ public class ServerInfoSummarizer {
             sb.append("Health: " + health + "/" + maxHealth + "\n");
             // sb.append("\tDead? " + isDead + "\n");
             // sb.append("\tInventory: " + inventoryInfo + "\n");
-            sb.append("Dead? " + isDead + "\n");
+            sb.append(isDead? "Dead\n" : "Alive\n");
+            sb.append(isSleeping? "Asleep\n" : "Awake\n");
             sb.append(inventoryInfo + "\n");
         }
 
