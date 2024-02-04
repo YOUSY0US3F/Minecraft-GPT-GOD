@@ -60,7 +60,7 @@ public class ServerInfoSummarizer {
             // sb.append("\tDead? " + isDead + "\n");
             // sb.append("\tInventory: " + inventoryInfo + "\n");
             sb.append(isDead? "Dead\n" : "Alive\n");
-            sb.append(isSleeping? "Asleep\n" : "Awake\n");
+            sb.append(isSleeping? "Asleep\n" : "");
             sb.append(inventoryInfo + "\n");
         }
 
