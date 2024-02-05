@@ -16,7 +16,7 @@ public class DropItemLoggable extends BaseLoggable {
             this.amount = amount;
         }
         public boolean equals(Object o){
-            if(!(o instanceof Pickup)) return false;
+            if(!(o instanceof Drop)) return false;
             Drop d = (Drop) o;
             return this.itemName.equals(d.itemName);
         }

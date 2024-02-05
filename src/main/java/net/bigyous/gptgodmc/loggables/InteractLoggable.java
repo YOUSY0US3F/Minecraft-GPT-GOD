@@ -23,10 +23,10 @@ public class InteractLoggable extends BaseLoggable {
             sb.append(" repeatedly ");
         }
         if(itemName != null){
-            sb.append("tried to use " + itemName + " on ");
+            sb.append(" tried to use " + itemName + " on ");
         }
         else{
-            sb.append("interacted with ");
+            sb.append(" interacted with ");
         }
         sb.append(targetName);
         return sb.toString();
@@ -34,6 +34,11 @@ public class InteractLoggable extends BaseLoggable {
     }
 
     public boolean equals(InteractLoggable other){
+        // just found out the null object doesn't have .equals
+        if(this.itemName == null){
+            return playerName.equals(other.playerName) && other.itemName == null
+            && targetName.equals(other.targetName);
+        }
         return playerName.equals(other.playerName) && itemName.equals(other.itemName)
             && targetName.equals(other.targetName);
     }

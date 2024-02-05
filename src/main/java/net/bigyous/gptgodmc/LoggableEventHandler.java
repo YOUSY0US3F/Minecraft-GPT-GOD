@@ -99,10 +99,4 @@ public class LoggableEventHandler {
             new FishingLoggable(event)
         );
     }
-    @SubscribeEvent
-    public static void onDrowning(LivingDrownEvent event){
-        EventLogger.addLoggable(
-            new DrowningLoggable(event)
-        );
-    }
 }
