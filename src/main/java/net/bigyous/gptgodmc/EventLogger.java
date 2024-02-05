@@ -30,7 +30,10 @@ public class EventLogger {
         );
         
         for (Loggable event: loggables) {
-            logs.add(event.getLog());
+            String log = event.getLog();
+            if(log != null){
+                logs.add(log);
+            }
         }
 
         // Clear events
