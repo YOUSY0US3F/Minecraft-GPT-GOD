@@ -1,5 +1,6 @@
 # GPT GOD for Minecraft
-
+# Discalimer
+This repo does not contain and will never contain a functioning product, see [GPT god plugin](https://github.com/YOUSY0US3F/minecraft-gpt-god-plugin) instead
 ## Helpful resources
 
 - [Simple Voice Chat Plugin API](https://github.com/henkelmax/simple-voice-chat/blob/1.18.2/api/readme.md) for Forge.
